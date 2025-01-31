@@ -23,14 +23,14 @@ from MenuHandler import MenuHandler
 from Entities.RaceSelect import RaceSelector, Races
 #from Entities.Level_system.Level_logic import Level
 from Entities.Level_system.test import Level
-import json
+
 
 # --- Store Characters info ---
 MyChar = {}
 player2 = {} # not implemented yet
 Computer = {}
 
-# ----- Game Character ---------
+# ----- Game Entities ---------
 
 class GameCharacter(ABC):
     def __init__(self, name, classification, weapon, defense):
@@ -300,16 +300,20 @@ def create_character():
             "Chosen defense": archer_defense
         })
         MyChar.update(archer_data)
+
+
     player_level = Level()
     MyChar.update({
         "Current Level": player_level.get_level()
     })
-    print("\nYour Character:")
-    for key, val in MyChar.items():
-        print(f"{key} : {val}")
+    MyChar.update({
+        "xp": {
+            "Experience (xp)": 0,
+            "Xp needed to level up": 10
+        }
+    })
     
-
-
+    
 # ------- Main ---------
 def Player_entity():
     start = MenuHandler("Start")

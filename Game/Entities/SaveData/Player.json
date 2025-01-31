@@ -1,10 +1,14 @@
 {
-  "Race": "Human",
-  "name": "Top",
-  "Character type": "Wizard",
-  "Attack type": "Wand",
-  "Defense type": "Magic Barrier",
-  "Chosen attack": "Domination",
+  "Race": "Angel",
+  "name": "Tipoo",
+  "Character_type": "Warrior",
+  "Attack type": "Dual Sword",
+  "Defense type": null,
+  "Chosen attack": "Taunt",
   "Chosen defense": "Run",
-  "Current Level": 0
+  "Current Level": 2,
+  "xp": {
+    "Experience (xp)": 0,
+    "Xp needed to level up": 14
+  }
 }
