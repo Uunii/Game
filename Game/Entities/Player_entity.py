@@ -1,29 +1,10 @@
-## Version 1.0
-# Comments, most of the logic works, still need to implement player 2, battle simulation/logic and scoreboard. 
-# OOP Principles used: Encapsulation, Inheritance, Polymorphism, Abstraction, static methods
-
-# ----- Idea ------
-# Thought process (for me):
-# Create a class for character creation
-# main function calls class methods
-# store selected attributes
-# give option to create own class and attributes (work on)
-# Create logic for character battle (work on)
-# Score board? Multiplayer? (work on)
-
-# Logic flow: Create/Select Charcter -> set attributes -> battle against computer or another player -> keep scoreboard
-
-# Game logic.
-# Magic/phsyical resistance, attack type, elemental type, dungeon roguelite archtype game. Loot. 
 
 # Imports ----
 import random
 from abc import ABC, abstractmethod
 from MenuHandler import MenuHandler
 from Entities.RaceSelect import RaceSelector, Races
-#from Entities.Level_system.Level_logic import Level
-from Entities.Level_system.test import Level
-
+from Entities.Level_system.Level_logic import Level
 
 # --- Store Characters info ---
 MyChar = {}
@@ -49,10 +30,24 @@ class GameCharacter(ABC):
 
     def selectCharacter(self):
         MyChar.update({
-            "name": self.name,
-            "Character type": self.classification,
-            "Attack type": self.weapon,
-            "Defense type": self.defense
+            "Player": {
+                "name": self.name,
+                "Character type": self.classification,
+                "Attack type": self.weapon,
+                "Defense type": self.defense,
+                "Race": {
+                    "affinity": "Neutral",
+                    "unique_skill": "Determination"
+                },
+                "Current Level": {
+                    "Level": 1,
+                    "Skill Points": 0
+                },
+                "xp": {
+                    "Experience (xp)": 0,
+                    "Xp needed to level up": 10
+                }
+            }
         })
 
     def Player2(self):
@@ -63,6 +58,8 @@ class GameCharacter(ABC):
             "Defense type": self.defense
         })
 
+
+# ------ Companion ------------
 class Companion():
     @staticmethod
     def RandomCharacter():
@@ -140,7 +137,7 @@ class Archer(GameCharacter):
         print(f"{self.name} attacks with a {self.weapon}")
 
     def defend(self):
-        print(f"{self.name} defends witha {self.defense}")
+        print(f"{self.name} defends with a {self.defense}")
     
     def attack_options(self):
         options = input("Choose Attack options: Fire Arrow(A), Silver arrow(B), Dagger(C): ").strip().upper()
@@ -177,7 +174,6 @@ class Wizard(GameCharacter):
         options = input("Choose Defensive Spell: FireWall (A), IceWall (B), Run (C): ").strip().upper()
         return {"A": "FireWall", "B": "IceWall", "C": "Run"}.get(options, "Run")
 
-
 class Assassin(GameCharacter ):
     def __init__(self, name):
         super().__init__(name, "Assassin", "Daggers", "Stealth Cloak")
@@ -199,10 +195,18 @@ class Assassin(GameCharacter ):
 # ---- create character ------
 def create_character():
     name = input("Enter your character name: ")
-    Raceselected = RaceSelector()
+    race_data = RaceSelector()
+
     MyChar.update({
-        "Race": Raceselected
+        "Player": {
+            "Race": {
+                "Name": race_data.get("Name"),
+                "affinity": race_data.get("affinity"),
+                "unique_skill": race_data.get("unique skill")
+            }
+        }
     })
+    
     character_select = MenuHandler("Characters")
     character_select.format_menu()
     choice = MenuHandler.choice()
@@ -210,7 +214,7 @@ def create_character():
     if choice == 1:  
         wizard = Wizard(name)
         wizard_data = {"name": wizard.name, "Character type": wizard.classification}
-        MyChar.update(wizard_data)
+        MyChar["Player"].update(wizard_data)
 
         wizard_weapon_menu = MenuHandler("Wizard Weapon")
         wizard_weapon_menu.format_menu()
@@ -241,12 +245,12 @@ def create_character():
                 "Chosen attack": wizard_spell
             })
 
-        MyChar.update(wizard_data)
+        MyChar["Player"].update(wizard_data)
 
     elif choice == 2:  
         warrior = Warrior(name)
-        warrior_data = {"name": warrior.name, "Character_type": warrior.classification}
-        MyChar.update(warrior_data)
+        warrior_data = {"name": warrior.name, "Character type": warrior.classification}
+        MyChar["Player"].update(warrior_data)
 
         warrior_weapon_menu = MenuHandler("Warrior Weapon")
         warrior_weapon_menu.format_menu()
@@ -270,20 +274,20 @@ def create_character():
             "Chosen attack": warrior_attack,
             "Chosen defense": warrior_defense
         })
-        MyChar.update(warrior_data)
+        MyChar["Player"].update(warrior_data)
 
     elif choice == 3:
         archer = Archer(name)
-        archer_data = {"name": archer.name, "Character_type": archer.classification}
-        MyChar.update(archer_data)
+        archer_data = {"name": archer.name, "Character type": archer.classification}
+        MyChar["Player"].update(archer_data)
 
         archer_weapon_menu = MenuHandler("Archer Weapon")
         archer_weapon_menu.format_menu()
         weapon_choice = MenuHandler.choice()
 
         if weapon_choice == 1:
-            archer.weapon = "Arrow"
-            archer.Defense = "Dagger"
+            archer.weapon = "Bow"
+            archer.defense = "Dagger"
         elif weapon_choice == 2:
             archer.weapon = "Dual Arrows"
             archer.defense = None
@@ -296,24 +300,26 @@ def create_character():
         archer_attack = archer.attack_options()
         archer_defense = archer.defense_options()
         archer_data.update({
-            "Chose attack": archer_attack,
+            "Chosen attack": archer_attack,
             "Chosen defense": archer_defense
         })
-        MyChar.update(archer_data)
+        MyChar["Player"].update(archer_data)
 
-
+    
     player_level = Level()
-    MyChar.update({
-        "Current Level": player_level.get_level()
+    MyChar["Player"].update({
+        "Current Level": {
+            "Level": player_level.get_level(),  
+            "Skill Points": 1
+        }
     })
-    MyChar.update({
+    MyChar["Player"].update({
         "xp": {
             "Experience (xp)": 0,
             "Xp needed to level up": 10
         }
     })
-    
-    
+
 # ------- Main ---------
 def Player_entity():
     start = MenuHandler("Start")
@@ -326,4 +332,3 @@ def Player_entity():
         Companion.RandomCharacter()
 
     return MyChar
-

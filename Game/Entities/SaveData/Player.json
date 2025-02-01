@@ -1,14 +1,23 @@
 {
-  "Race": "Angel",
-  "name": "Tipoo",
-  "Character_type": "Warrior",
-  "Attack type": "Dual Sword",
-  "Defense type": null,
-  "Chosen attack": "Taunt",
-  "Chosen defense": "Run",
-  "Current Level": 2,
-  "xp": {
-    "Experience (xp)": 0,
-    "Xp needed to level up": 14
+  "Player": {
+    "Race": {
+      "Name": "Demon",
+      "affinity": "Evil",
+      "unique_skill": "Faint deception"
+    },
+    "name": "Guga",
+    "Character type": "Warrior",
+    "Attack type": "Sword",
+    "Defense type": "Shield",
+    "Chosen attack": "Taunt",
+    "Chosen defense": "Run",
+    "Current Level": {
+      "Level": 6,
+      "Skill Points": 31
+    },
+    "xp": {
+      "Experience (xp)": 5,
+      "Xp needed to level up": 29
+    }
   }
 }
