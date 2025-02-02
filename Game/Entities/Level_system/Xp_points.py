@@ -27,7 +27,7 @@ class ExperienceManager:
             player_data["xp"] = {"Experience (xp)": 0, "Xp needed to level up": 10}
 
         self.xp = player_data["xp"].get("Experience (xp)", 0)
-        self.xp_needed = self.get_xp_for_next_level() 
+        self.xp_needed = player_data["xp"].get("Xp needed to level up")
 
     def load_data(self):
         try:
@@ -43,12 +43,6 @@ class ExperienceManager:
                 json.dump(self.data, f, indent=2)
         except Exception as e:
             print(f"Error saving data: {e}")
-
-    def get_xp_for_next_level(self):
-        base_xp = 10  
-        scaling_factor = 1.2  
-        xp_for_next_level = int(base_xp * (scaling_factor ** self.level))
-        return xp_for_next_level
 
     def gain_xp(self, amount):
         if amount < 0 and self.xp + amount < 0:
@@ -73,8 +67,10 @@ class ExperienceManager:
     def level_up(self):
         self.level_info["Level"] += 1
         self.level_info["Skill Points"] += 5
-        self.xp_needed = self.xp_needed + 5  # 
-        self.data["Player"]["xp"]["Xp needed to level up"] = self.xp_needed
+        # Updated xp to be dynamically updated 
+        base_xp = 10  
+        scaling_factor = 1.21  
+        self.data["Player"]["xp"]["Xp needed to level up"]= int(base_xp * (scaling_factor ** self.level))
         print(f"🎉 Level Up! You are now Level {self.level_info['Level']}")
         print(f"🎯 You gained 5 Skill Points! Total SP: {self.level_info['Skill Points']}")
-        print(f"🆙 Next Level XP Required: {self.xp_needed} XP")
+        print(f"🆙 Next Level XP Required: {self.data["Player"]["xp"]["Xp needed to level up"]} XP")

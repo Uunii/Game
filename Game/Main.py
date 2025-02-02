@@ -145,7 +145,8 @@ def main():
     
     xp_manager = ExperienceManager(Player1)
     print("Here, have some experience points!")
-    xp_manager.gain_xp(3) 
+    xp_manager.gain_xp(13) 
+    
 
     save_data(Player1)
 

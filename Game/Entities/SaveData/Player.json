@@ -5,19 +5,19 @@
       "affinity": "Pure",
       "unique_skill": "Golden Era"
     },
-    "name": "Topset",
+    "name": "Diddy",
     "Character type": "Archer",
     "Attack type": "Dual Arrows",
     "Defense type": null,
     "Chosen attack": "Dagger",
     "Chosen defense": "Run",
     "Current Level": {
-      "Level": 0,
-      "Skill Points": 1
+      "Level": 8,
+      "Skill Points": 66
     },
     "xp": {
-      "Experience (xp)": 3,
-      "Xp needed to level up": 10
+      "Experience (xp)": 7,
+      "Xp needed to level up": 37
     }
   }
 }
