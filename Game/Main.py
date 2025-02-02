@@ -76,7 +76,7 @@ def Reset_level():
 
 def print_player_data(player_data):
     for key, val in player_data.items():
-        print(f"🔹 {key}:")  
+        print(f"\n🔹 {key}:")  
         if isinstance(val, dict):
             for sub_key, sub_val in val.items():
                 if sub_key == "Race":

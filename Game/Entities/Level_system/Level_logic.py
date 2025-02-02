@@ -19,7 +19,6 @@ class Level():
             return current_level
 
         except json.decoder.JSONDecodeError as e:
-            print("Error loading the file, creating new character.")
             return 0
         except Exception as e:
             print(f"An error occurred: {e}")

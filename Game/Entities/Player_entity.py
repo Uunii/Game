@@ -28,27 +28,7 @@ class GameCharacter(ABC):
     def defend(self):
         pass
 
-    def selectCharacter(self):
-        MyChar.update({
-            "Player": {
-                "name": self.name,
-                "Character type": self.classification,
-                "Attack type": self.weapon,
-                "Defense type": self.defense,
-                "Race": {
-                    "affinity": "Neutral",
-                    "unique_skill": "Determination"
-                },
-                "Current Level": {
-                    "Level": 1,
-                    "Skill Points": 0
-                },
-                "xp": {
-                    "Experience (xp)": 0,
-                    "Xp needed to level up": 10
-                }
-            }
-        })
+    
 
     def Player2(self):
         player2.update({

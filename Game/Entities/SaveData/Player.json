@@ -1,23 +1,23 @@
 {
   "Player": {
     "Race": {
-      "Name": "Demon",
-      "affinity": "Evil",
-      "unique_skill": "Faint deception"
+      "Name": "Angel",
+      "affinity": "Pure",
+      "unique_skill": "Golden Era"
     },
-    "name": "Guga",
-    "Character type": "Warrior",
-    "Attack type": "Sword",
-    "Defense type": "Shield",
-    "Chosen attack": "Taunt",
+    "name": "Topset",
+    "Character type": "Archer",
+    "Attack type": "Dual Arrows",
+    "Defense type": null,
+    "Chosen attack": "Dagger",
     "Chosen defense": "Run",
     "Current Level": {
-      "Level": 6,
-      "Skill Points": 31
+      "Level": 0,
+      "Skill Points": 1
     },
     "xp": {
-      "Experience (xp)": 5,
-      "Xp needed to level up": 29
+      "Experience (xp)": 3,
+      "Xp needed to level up": 10
     }
   }
 }
