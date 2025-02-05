@@ -1,7 +1,16 @@
 # Enemies for game
 from abc import ABC, abstractmethod
-from Topi_Game.MenuHandler import MenuHandler
+from MenuHandler import MenuHandler
 import random
+
+
+# Work on wolf "call of the pack" logic.
+# Enemy spawns are completely random for now, even the number of enemies.
+# Health Logic missing
+# Damage logic&calculation missing
+# 
+#  
+
 
 enemy_Computer = {}
 
@@ -52,10 +61,10 @@ class GameEnemies(ABC):
 
         enemy_comp_char = {
             "name" : f"{chosen_weapon} {char_type} ",
-            "Character_type": char_type,
-            "Attack_type": chosen_weapon,
+            "Character type": char_type,
+            "Attack type": chosen_weapon,
             "Attack": chosen_attack,
-            "Defense_type": chosen_defense,
+            "Defense type": chosen_defense,
         }
 
         enemy_Computer.update(enemy_comp_char)
@@ -66,15 +75,10 @@ class GameEnemies(ABC):
             print(f"{key} : {value}")
         print("------------------------------------")
 
-def main():
-    start = MenuHandler("Start")
-    start.format_menu()
-    choice = MenuHandler.choice()
-
-    if choice == 1:
-        Max_enemies = random.randrange(1, 10, 1)
-        for i in range(Max_enemies):
-            print(f"\nEnemy {i+1}")
-            GameEnemies.RandomEnemy()
+def Enemy_entity():
+    Max_enemies = random.randrange(1, 10, 1)
+    for i in range(Max_enemies):
+        print(f"\nEnemy {i+1}")
+        GameEnemies.RandomEnemy()
     
-main()
+

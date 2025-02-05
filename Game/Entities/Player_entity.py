@@ -1,33 +1,17 @@
-## Version 1.0
-# Comments, most of the logic works, still need to implement player 2, battle simulation/logic and scoreboard. 
-# OOP Principles used: Encapsulation, Inheritance, Polymorphism, Abstraction, static methods
-
-# ----- Idea ------
-# Thought process (for me):
-# Create a class for character creation
-# main function calls class methods
-# store selected attributes
-# give option to create own class and attributes (work on)
-# Create logic for character battle (work on)
-# Score board? Multiplayer? (work on)
-
-# Logic flow: Create/Select Charcter -> set attributes -> battle against computer or another player -> keep scoreboard
-
-# Game logic.
-# Magic/phsyical resistance, attack type, elemental type, dungeon roguelite archtype game. Loot. 
 
 # Imports ----
 import random
 from abc import ABC, abstractmethod
-from Topi_Game.MenuHandler import MenuHandler
-
+from MenuHandler import MenuHandler
+from Entities.RaceSelect import RaceSelector, Races
+from Entities.Level_system.Level_logic import Level
 
 # --- Store Characters info ---
 MyChar = {}
 player2 = {} # not implemented yet
 Computer = {}
 
-# ----- Game Character ---------
+# ----- Game Entities ---------
 
 class GameCharacter(ABC):
     def __init__(self, name, classification, weapon, defense):
@@ -44,24 +28,25 @@ class GameCharacter(ABC):
     def defend(self):
         pass
 
-    def selectCharacter(self):
-        MyChar.update({
-            "name": self.name,
-            "Character_type": self.classification,
-            "Attack_type": self.weapon,
-            "Defense_type": self.defense
-        })
+    
 
     def Player2(self):
         player2.update({
             "name": self.name,
-            "Character_type": self.classification,
-            "Attack_type": self.weapon,
-            "Defense_type": self.defense
+            "Character type": self.classification,
+            "Attack type": self.weapon,
+            "Defense type": self.defense
         })
 
+
+# ------ Companion ------------
+class Companion():
     @staticmethod
     def RandomCharacter():
+        random_race = random.choice(Races.racelist[2:])
+        Computer.update({
+            "Race": random_race
+        })
         character_types = ["Warrior", "Wizard"]
         weapons = {
             "Warrior": ["Sword", "Dual Sword"],
@@ -90,10 +75,10 @@ class GameCharacter(ABC):
 
         comp_char = {
             "name": "R3D",
-            "Character_type": char_type,
-            "Attack_type": chosen_weapon,
+            "Character type": char_type,
+            "Attack type": chosen_weapon,
             "Attack": chosen_attack,
-            "Defense_type": chosen_defense
+            "Defense type": chosen_defense
         }
 
         Computer.update(comp_char)
@@ -123,6 +108,7 @@ class Warrior(GameCharacter):
         options = input("Choose Defense: Shield Guard (A), Run (B): ").strip().upper()
         return {"A": "Shield Guard", "B": "Run"}.get(options, "Run")
 
+
 class Archer(GameCharacter):
     def __init__(self, name):
         super().__init__(name, "Archer", "Bow", "Dagger")
@@ -131,7 +117,7 @@ class Archer(GameCharacter):
         print(f"{self.name} attacks with a {self.weapon}")
 
     def defend(self):
-        print(f"{self.name} defends witha {self.defense}")
+        print(f"{self.name} defends with a {self.defense}")
     
     def attack_options(self):
         options = input("Choose Attack options: Fire Arrow(A), Silver arrow(B), Dagger(C): ").strip().upper()
@@ -144,6 +130,8 @@ class Archer(GameCharacter):
     def defense_options(self):
         options = input ("Choose Defense: Dagger throw(A), Run(B): ").strip().upper()
         return {"A": "Dagger", "B": "Run"}.get(options, "Run")
+    
+
 class Wizard(GameCharacter):
     def __init__(self, name):
         super().__init__(name, "Wizard", "Wand", "Magic Barrier")
@@ -166,7 +154,6 @@ class Wizard(GameCharacter):
         options = input("Choose Defensive Spell: FireWall (A), IceWall (B), Run (C): ").strip().upper()
         return {"A": "FireWall", "B": "IceWall", "C": "Run"}.get(options, "Run")
 
-
 class Assassin(GameCharacter ):
     def __init__(self, name):
         super().__init__(name, "Assassin", "Daggers", "Stealth Cloak")
@@ -183,17 +170,31 @@ class Assassin(GameCharacter ):
     def defense_options(self):
         options = input("Choose Defense: Stealth Cloak (A), Run(B)")
         return {"A": "Stealth Cloak", "B": "Run"}.get(options, "Run")
+    
+
 # ---- create character ------
 def create_character():
     name = input("Enter your character name: ")
+    race_data = RaceSelector()
+
+    MyChar.update({
+        "Player": {
+            "Race": {
+                "Name": race_data.get("Name"),
+                "affinity": race_data.get("affinity"),
+                "unique_skill": race_data.get("unique skill")
+            }
+        }
+    })
+    
     character_select = MenuHandler("Characters")
     character_select.format_menu()
     choice = MenuHandler.choice()
 
     if choice == 1:  
         wizard = Wizard(name)
-        wizard_data = {"name": wizard.name, "Character_type": wizard.classification}
-        MyChar.update(wizard_data)
+        wizard_data = {"name": wizard.name, "Character type": wizard.classification}
+        MyChar["Player"].update(wizard_data)
 
         wizard_weapon_menu = MenuHandler("Wizard Weapon")
         wizard_weapon_menu.format_menu()
@@ -207,29 +208,29 @@ def create_character():
             wizard.defense = None
 
         wizard_data.update({
-            "Attack_type": wizard.weapon,
-            "Defense_type": wizard.defense
+            "Attack type": wizard.weapon,
+            "Defense type": wizard.defense
         })
 
         if wizard.weapon == "Wand":
             wizard_spell = wizard.attack_options()
             wizard_defense = wizard.defense_spells()
             wizard_data.update({
-                "Chosen_attack": wizard_spell,
-                "Chosen_defense": wizard_defense
+                "Chosen attack": wizard_spell,
+                "Chosen defense": wizard_defense
             })
         elif wizard.weapon == "Dual Wand":
             wizard_spell = wizard.dual_wand_attack_options()
             wizard_data.update({
-                "Chosen_attack": wizard_spell
+                "Chosen attack": wizard_spell
             })
 
-        MyChar.update(wizard_data)
+        MyChar["Player"].update(wizard_data)
 
     elif choice == 2:  
         warrior = Warrior(name)
-        warrior_data = {"name": warrior.name, "Character_type": warrior.classification}
-        MyChar.update(warrior_data)
+        warrior_data = {"name": warrior.name, "Character type": warrior.classification}
+        MyChar["Player"].update(warrior_data)
 
         warrior_weapon_menu = MenuHandler("Warrior Weapon")
         warrior_weapon_menu.format_menu()
@@ -243,64 +244,71 @@ def create_character():
             warrior.defense = None
 
         warrior_data.update({
-            "Attack_type": warrior.weapon,
-            "Defense_type": warrior.defense
+            "Attack type": warrior.weapon,
+            "Defense type": warrior.defense
         })
 
         warrior_attack = warrior.attack_options()
         warrior_defense = warrior.defense_options()
         warrior_data.update({
-            "Chosen_attack": warrior_attack,
-            "Chosen_defense": warrior_defense
+            "Chosen attack": warrior_attack,
+            "Chosen defense": warrior_defense
         })
-        MyChar.update(warrior_data)
+        MyChar["Player"].update(warrior_data)
 
     elif choice == 3:
         archer = Archer(name)
-        archer_data = {"name": archer.name, "Character_type": archer.classification}
-        MyChar.update(archer_data)
+        archer_data = {"name": archer.name, "Character type": archer.classification}
+        MyChar["Player"].update(archer_data)
 
         archer_weapon_menu = MenuHandler("Archer Weapon")
         archer_weapon_menu.format_menu()
         weapon_choice = MenuHandler.choice()
 
         if weapon_choice == 1:
-            archer.weapon = "Arrow"
-            archer.Defense = "Dagger"
+            archer.weapon = "Bow"
+            archer.defense = "Dagger"
         elif weapon_choice == 2:
             archer.weapon = "Dual Arrows"
             archer.defense = None
 
         archer_data.update({
-            "Attack_type": archer.weapon,
-            "Defense_type": archer.defense
+            "Attack type": archer.weapon,
+            "Defense type": archer.defense
         })
 
         archer_attack = archer.attack_options()
         archer_defense = archer.defense_options()
         archer_data.update({
-            "Chose_attack": archer_attack,
-            "Chosen_defense": archer_defense
+            "Chosen attack": archer_attack,
+            "Chosen defense": archer_defense
         })
-        MyChar.update(archer_data)
+        MyChar["Player"].update(archer_data)
 
-    print("\nYour Character:")
-    for key, val in MyChar.items():
-        print(f"{key} : {val}")
+    
+    player_level = Level()
+    MyChar["Player"].update({
+        "Current Level": {
+            "Level": player_level.get_level(),  
+            "Skill Points": 1
+        }
+    })
+    MyChar["Player"].update({
+        "xp": {
+            "Experience (xp)": 0,
+            "Xp needed to level up": 10
+        }
+    })
 
 # ------- Main ---------
-def main():
+def Player_entity():
     start = MenuHandler("Start")
     start.format_menu()
     choice = MenuHandler.choice()
 
     if choice == 1:
         create_character()
-        GameCharacter.RandomCharacter()
     elif choice == 2:
-        GameCharacter.RandomCharacter()
+        Companion.RandomCharacter()
 
     return MyChar
-
-if __name__ == "__main__":
-    main()

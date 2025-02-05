@@ -1,0 +1,23 @@
+{
+  "Player": {
+    "Race": {
+      "Name": "Angel",
+      "affinity": "Pure",
+      "unique_skill": "Golden Era"
+    },
+    "name": "Diddy",
+    "Character type": "Archer",
+    "Attack type": "Dual Arrows",
+    "Defense type": null,
+    "Chosen attack": "Dagger",
+    "Chosen defense": "Run",
+    "Current Level": {
+      "Level": 8,
+      "Skill Points": 66
+    },
+    "xp": {
+      "Experience (xp)": 7,
+      "Xp needed to level up": 37
+    }
+  }
+}
